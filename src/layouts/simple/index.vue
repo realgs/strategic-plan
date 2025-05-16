@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen overflow-auto">
+  <div class="min-h-screen bg-gray-50">
     <router-view />
   </div>
 </template>
@@ -9,9 +9,3 @@ defineOptions({
     name: 'SimpleLayout',
 });
 </script>
-
-<style scoped>
-.h-screen {
-    height: 100vh;
-}
-</style>

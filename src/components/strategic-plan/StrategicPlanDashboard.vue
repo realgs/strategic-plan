@@ -34,7 +34,7 @@
               <div
                 v-for="(stat, index) in stats"
                 :key="stat.title"
-                class="stats-card p-4 rounded-lg cursor-pointer transform transition-all duration-300"
+                class="stats-card p-4 rounded-lg transform transition-all duration-300"
                 :class="[
                   stat.bgClass,
                   {
@@ -140,7 +140,7 @@
             <div
               v-for="quarter in ['Q1', 'Q2', 'Q3', 'Q4']"
               :key="quarter"
-              class="border rounded-lg p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg w-full"
+              class="quarter-card border rounded-lg p-4 transform transition-all duration-300 hover:shadow-lg w-full"
               :class="{ 'scale-105': selectedQuarter === quarter }"
               @click="selectQuarter(quarter)"
             >
@@ -202,7 +202,7 @@
             <div
               v-for="(kpi, idx) in kpis"
               :key="idx"
-              class="border rounded-lg p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg"
+              class="kpi-card border rounded-lg p-4 transform transition-all duration-300 hover:shadow-lg"
               @click="animateKPI(idx)"
             >
               <h3 class="font-semibold text-gray-700">
@@ -471,39 +471,65 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
-const quarterlyObjectives = {
-    Q1: [
-        'Automatización de publicación en 5 portales',
-        'API de integración con portales principales',
-        'Sistema de notificaciones en tiempo real',
-        'Refactorizar Scraper de LinkedIn (200+ perfiles/día)',
-    ],
-    Q2: [
-        'Implementar análisis con Hotjar',
-        'Lanzar editor WYSIWYG de páginas de carreras',
-        'Respuestas automatizadas basadas en IA',
-        'Escalar a 1400+ perfiles diarios',
-    ],
-    Q3: [
-        'Localización para mercado español',
-        'Integraciones HRIS españolas',
-        'Alcanzar 400k perfiles',
-        'Primeras 10 ventas en España',
-    ],
-    Q4: [
-        'Expansión a 3 nuevas integraciones',
-        'Automatización completa del proceso',
-        'Alcanzar 500k perfiles',
-        'Consolidar ventas en España',
-    ],
-};
+const isPresentationMode = ref(false);
+const selectedQuarter = ref('Q1');
+const clickedIndexes = ref([]);
+const isTimelineVisible = ref(false);
+const isKpiVisible = ref(false);
 
-const quarterlyMilestones = {
-    Q1: '200+ perfiles/día y 5 portales integrados',
-    Q2: '1400+ perfiles/día y editor WYSIWYG',
-    Q3: 'Lanzamiento en España con 400k perfiles',
-    Q4: '500k perfiles y consolidación en España',
-};
+const stats = ref([
+  {
+    title: 'Facturación Actual',
+    value: '125K',
+    detail: '€ (FR + UK)',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-blue-600'
+  },
+  {
+    title: 'Facturación Objetivo',
+    value: '285K',
+    detail: '€ (205K FR+UK, 60K ES)',
+    bgClass: 'bg-green-50',
+    textClass: 'text-green-600'
+  },
+  {
+    title: 'Inversión',
+    value: '90K',
+    detail: '€',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600'
+  }
+]);
+
+const quarterlyObjectives = ref({
+  'Q1': [
+    'Establecer equipo base',
+    'Definir procesos internos',
+    'Iniciar primeros proyectos'
+  ],
+  'Q2': [
+    'Expandir cartera de clientes',
+    'Optimizar operaciones',
+    'Desarrollar partnerships'
+  ],
+  'Q3': [
+    'Escalar operaciones',
+    'Aumentar presencia en mercado',
+    'Implementar mejoras de procesos'
+  ],
+  'Q4': [
+    'Consolidar crecimiento',
+    'Evaluar resultados anuales',
+    'Planificar siguiente año'
+  ]
+});
+
+const quarterlyMilestones = ref({
+  'Q1': 'Equipo base formado y primeros proyectos en marcha',
+  'Q2': 'Cartera de clientes diversificada y procesos optimizados',
+  'Q3': 'Operaciones escaladas y mayor presencia en mercado',
+  'Q4': 'Objetivos anuales alcanzados y plan 2025 definido'
+});
 
 const kpis = [
     {
@@ -612,36 +638,6 @@ const risks = [
     },
 ];
 
-const isHeaderVisible = ref(true);
-const isTimelineVisible = ref(false);
-const isKpiVisible = ref(false);
-const selectedQuarter = ref(null);
-const kpiProgress = ref(kpis.map(kpi => kpi.progress));
-
-const stats = [
-    {
-        title: 'Facturación Actual',
-        value: '75K €',
-        detail: '(FR + UK)',
-        bgClass: 'bg-blue-50',
-        textClass: 'text-blue-600',
-    },
-    {
-        title: 'Facturación Objetivo',
-        value: '265K €',
-        detail: '(205K FR+UK, 60K ES)',
-        bgClass: 'bg-green-50',
-        textClass: 'text-green-600',
-    },
-    {
-        title: 'Inversión',
-        value: '500K €',
-        detail: '',
-        bgClass: 'bg-purple-50',
-        textClass: 'text-purple-600',
-    },
-];
-
 const timelineSection = ref(null);
 const kpiSection = ref(null);
 const budgetSection = ref(null);
@@ -651,142 +647,164 @@ const isBudgetVisible = ref(false);
 const isTeamVisible = ref(false);
 const isRiskVisible = ref(false);
 
-const isPresentationMode = ref(true);
-const hasStartedPresentation = ref(false);
-const clickedIndexes = ref([]);
-const clickCount = ref(0);
+const kpiProgress = ref(kpis.map(kpi => kpi.progress));
+const kpiAnimated = ref(new Array(kpis.length).fill(false));
 
-// Update the observer
-const observer = new IntersectionObserver((entries) => {
+const handleStatClick = (index) => {
+  if (clickedIndexes.value.includes(index)) {
+    clickedIndexes.value = clickedIndexes.value.filter(i => i !== index);
+  } else {
+    clickedIndexes.value.push(index);
+  }
+};
+
+const selectQuarter = (quarter) => {
+  selectedQuarter.value = quarter;
+};
+
+// Create two observers with different thresholds
+const appearObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-        const sectionId = entry.target.dataset.section;
-        switch (sectionId) {
-        case 'timeline':
-            isTimelineVisible.value = entry.isIntersecting;
-            break;
-        case 'kpi':
-            isKpiVisible.value = entry.isIntersecting;
-            if (entry.isIntersecting) animateAllKPIs();
-            break;
-        case 'budget':
-            isBudgetVisible.value = entry.isIntersecting;
-            break;
-        case 'team':
-            isTeamVisible.value = entry.isIntersecting;
-            break;
-        case 'risk':
-            isRiskVisible.value = entry.isIntersecting;
-            break;
+        if (entry.isIntersecting) {
+            const sectionId = entry.target.dataset.section;
+            switch (sectionId) {
+                case 'timeline':
+                    isTimelineVisible.value = true;
+                    break;
+                case 'kpi':
+                    isKpiVisible.value = true;
+                    animateAllKPIs();
+                    break;
+                case 'budget':
+                    isBudgetVisible.value = true;
+                    break;
+                case 'team':
+                    isTeamVisible.value = true;
+                    break;
+                case 'risk':
+                    isRiskVisible.value = true;
+                    break;
+            }
         }
     });
-}, { threshold: 0.2 });
+}, { 
+    threshold: 0.15, // Appear when 15% visible (decreased from 40%)
+    rootMargin: '-50px 0px'
+});
+
+const disappearObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+            const sectionId = entry.target.dataset.section;
+            switch (sectionId) {
+                case 'timeline':
+                    isTimelineVisible.value = false;
+                    break;
+                case 'kpi':
+                    isKpiVisible.value = false;
+                    resetKPIAnimations();
+                    break;
+                case 'budget':
+                    isBudgetVisible.value = false;
+                    break;
+                case 'team':
+                    isTeamVisible.value = false;
+                    break;
+                case 'risk':
+                    isRiskVisible.value = false;
+                    break;
+            }
+        }
+    });
+}, { 
+    threshold: 0.05, // Keep visible until only 5% is visible (decreased from 10%)
+    rootMargin: '-50px 0px'
+});
 
 onMounted(() => {
-    // Show header immediately in presentation mode
-    isHeaderVisible.value = true;
-
-    // Only start observing sections after presentation mode is done
-    if (!isPresentationMode.value) {
-        const sections = [
-            { ref: timelineSection.value, id: 'timeline' },
-            { ref: kpiSection.value, id: 'kpi' },
-            { ref: budgetSection.value, id: 'budget' },
-            { ref: teamSection.value, id: 'team' },
-            { ref: riskSection.value, id: 'risk' },
-        ];
-
-        sections.forEach(({ ref, id }) => {
-            if (ref) {
-                ref.dataset.section = id;
-                observer.observe(ref);
-            }
-        });
-    }
-});
-
-onUnmounted(() => {
-    observer.disconnect();
-});
-
-// Interactive functions
-function handleStatClick (index) {
-    // Only add if not already clicked
-    if (!clickedIndexes.value.includes(index)) {
-        clickedIndexes.value.push(index);
-        clickCount.value++;
-
-        console.log('Clicked indexes:', clickedIndexes.value);
-
-        if (clickCount.value >= 3) {
-            setTimeout(() => {
-                startMainPresentation();
-            }, 500);
-        }
-    }
-}
-
-function startMainPresentation () {
-    hasStartedPresentation.value = true;
-
-    // Show full content
-    setTimeout(() => {
-        isPresentationMode.value = false;
-    }, 500);
-
-    // Show all sections and animate KPIs
+    // Add a small delay for the animations
     setTimeout(() => {
         isTimelineVisible.value = true;
         isKpiVisible.value = true;
         isBudgetVisible.value = true;
         isTeamVisible.value = true;
         isRiskVisible.value = true;
+    }, 500);
 
-        // Trigger KPI animations
-        kpiProgress.value = kpis.map(() => 0);
-        setTimeout(() => {
-            kpiProgress.value = kpis.map(kpi => kpi.progress);
-        }, 100);
-    }, 1000);
+    // Set up observers for sections
+    const sections = [
+        { ref: timelineSection.value, id: 'timeline' },
+        { ref: kpiSection.value, id: 'kpi' },
+        { ref: budgetSection.value, id: 'budget' },
+        { ref: teamSection.value, id: 'team' },
+        { ref: riskSection.value, id: 'risk' }
+    ];
 
-    // Scroll to top
-    setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1500);
-}
+    sections.forEach(({ ref, id }) => {
+        if (ref) {
+            ref.dataset.section = id;
+            appearObserver.observe(ref);
+            disappearObserver.observe(ref);
+        }
+    });
+});
 
-function selectQuarter (quarter) {
-    selectedQuarter.value = selectedQuarter.value === quarter ? null : quarter;
-}
+onUnmounted(() => {
+    appearObserver.disconnect();
+    disappearObserver.disconnect();
+});
 
-function animateKPI (index) {
-    const progress = kpiProgress.value[index];
+function animateKPI(index) {
+  // Only animate if not already animated or forced reset
+  if (!kpiAnimated.value[index]) {
     kpiProgress.value[index] = 0;
+    kpiAnimated.value[index] = true;
 
     requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            kpiProgress.value[index] = kpis[index].progress;
-        });
+      requestAnimationFrame(() => {
+        kpiProgress.value[index] = kpis[index].progress;
+      });
     });
+  }
 }
 
-function animateAllKPIs () {
-    kpiProgress.value = kpiProgress.value.map(() => 0);
+function animateAllKPIs() {
+  // Only animate KPIs that haven't been animated yet
+  const unaninimatedKPIs = kpiAnimated.value.some(animated => !animated);
+  
+  if (unaninimatedKPIs) {
+    kpiProgress.value = kpis.map(() => 0);
+    kpiAnimated.value = new Array(kpis.length).fill(true);
 
     requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            kpiProgress.value = kpis.map(kpi => kpi.progress);
-        });
+      requestAnimationFrame(() => {
+        kpiProgress.value = kpis.map(kpi => kpi.progress);
+      });
     });
+  }
+}
+
+// Reset KPI animations when they leave viewport
+function resetKPIAnimations() {
+  kpiAnimated.value = new Array(kpis.length).fill(false);
 }
 </script>
 
 <style scoped>
 .strategic-plan-dashboard {
-  @apply bg-gray-50;
+  @apply bg-gray-50 select-none cursor-default;
 }
 
 .stats-card {
   @apply min-w-[200px];
+}
+
+/* Remove the cursor-default specific rule since it's now global */
+/* Add cursor-pointer only to truly interactive elements */
+.stats-card,
+.quarter-card,
+.kpi-card {
+  @apply cursor-pointer;
 }
 
 /* Smooth transitions */
