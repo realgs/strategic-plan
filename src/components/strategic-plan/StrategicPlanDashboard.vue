@@ -196,14 +196,14 @@
             <div
               v-for="quarter in ['Q1', 'Q2', 'Q3', 'Q4']"
               :key="quarter"
-              class="border rounded-lg p-3 sm:p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg w-full"
+              class="border rounded-lg p-3 sm:p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg w-full md:flex md:flex-col"
               :class="{ 'scale-[1.02]': selectedQuarter === quarter }"
               @click="selectQuarter(quarter)"
             >
               <h3 class="font-bold text-base sm:text-lg text-blue-600">
                 {{ quarter }}
               </h3>
-              <ul class="mt-2 space-y-2 text-[14px] sm:text-sm">
+              <ul class="mt-2 space-y-2 text-[14px] sm:text-sm md:min-h-[200px] md:pb-6">
                 <TransitionGroup name="list">
                   <li
                     v-for="(objective, idx) in quarterlyObjectives[quarter]"
@@ -215,7 +215,7 @@
                   </li>
                 </TransitionGroup>
               </ul>
-              <div class="mt-4 pt-4 border-t">
+              <div class="mt-4 pt-4 border-t md:mt-auto">
                 <p class="text-[14px] font-semibold text-gray-700">
                   Milestone:
                 </p>
