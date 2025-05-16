@@ -57,12 +57,12 @@
               <div
                 v-for="(stat, index) in stats"
                 :key="stat.title"
-                class="stats-card p-6 rounded-lg cursor-pointer transform transition-all duration-300 relative group"
+                class="stats-card p-6 rounded-lg cursor-pointer transform transition-all duration-300 relative group focus:outline-none focus:ring-0 focus:border-0 active:outline-none active:ring-0 active:border-0 border-0 outline-none ring-0"
                 :class="[
                   stat.bgClass,
                   {
-                    'scale-105': clickedIndexes.includes(index),
-                    'hover:scale-105 hover:shadow-lg': !clickedIndexes.includes(index),
+                    'scale-105 border-0 outline-none': clickedIndexes.includes(index),
+                    'hover:scale-105 hover:shadow-lg hover:border-0 hover:outline-none': !clickedIndexes.includes(index),
                     'animate-card-pulse': isPresentationMode && !clickedIndexes.includes(index),
                     'w-full': isPresentationMode,
                     'flex-shrink-0 w-[320px] snap-center': !isPresentationMode
@@ -77,7 +77,7 @@
               >
                 <div
                   v-if="isPresentationMode && !clickedIndexes.includes(index)"
-                  class="absolute -top-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-gray-700 bg-opacity-90 text-white text-xs rounded-full opacity-0 group-hover:opacity-100 tooltip-transition whitespace-nowrap shadow-lg"
+                  class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-700 bg-opacity-90 text-white text-xs rounded-full px-3 py-1 whitespace-nowrap shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-300 delay-1000 z-[9999]"
                 >
                   {{ getTooltipText(index) }}
                 </div>
@@ -257,14 +257,19 @@
             >
               <h3 class="font-semibold text-gray-700 flex items-center gap-2">
                 {{ kpi.name }}
-                <div v-if="kpi.name === 'CLTV'" class="hidden md:inline-flex items-center relative group/tooltip">
+                <div v-if="kpi.name === 'CLTV'" class="hidden md:inline-flex items-center relative"
+                     @mouseenter="showCLTVTooltip = true; updateCLTVTooltipPosition($event)"
+                     @mouseleave="showCLTVTooltip = false">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
                        class="w-4 h-4 text-gray-500 cursor-help">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                   </svg>
-                  <div class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-gray-700 bg-opacity-90 text-white text-xs rounded-full opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-lg pointer-events-none">
-                    Customer Lifetime Value: Valor total que un cliente genera durante su relación con la empresa
-                  </div>
+                  <Teleport to="body">
+                    <div v-show="showCLTVTooltip" class="fixed bg-gray-700 bg-opacity-90 text-white text-xs rounded-full px-3 py-1 whitespace-nowrap shadow-lg pointer-events-none transition-opacity duration-300 z-[9999]"
+                         :style="cltvTooltipPosition">
+                      Customer Lifetime Value: Valor total que un cliente genera durante su relación con la empresa
+                    </div>
+                  </Teleport>
                 </div>
               </h3>
               <div class="mt-2">
@@ -514,7 +519,7 @@
             <div
               v-for="(risk, idx) in risks"
               :key="idx"
-              class="border rounded-lg p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg hover:scale-105"
+              class="border rounded-lg p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg hover:scale-[1.025]"
             >
               <h3 class="font-semibold text-gray-700">
                 {{ risk.name }}
@@ -677,7 +682,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed, Teleport } from 'vue';
 
 const quarterlyObjectives = ref({
     Q1: [
@@ -1060,6 +1065,46 @@ function handleKeyboardNavigation(event) {
 
 // Add splash screen state
 const showSplash = ref(true);
+
+// Añadir nuevas variables y funciones para el tooltip de CLTV
+const showCLTVTooltip = ref(false);
+const cltvTooltipPosition = ref({ top: '0px', left: '0px' });
+
+function updateCLTVTooltipPosition(event) {
+  const rect = event.target.getBoundingClientRect();
+  cltvTooltipPosition.value = {
+    top: `${rect.top - 40}px`,
+    left: `${rect.left + rect.width / 2}px`,
+    transform: 'translateX(-50%)'
+  };
+}
+
+// Variables reactivas para los tooltips
+const tooltipVisible = ref([false, false, false]);
+const tooltipPositions = ref([
+  { top: '0px', left: '0px', transform: 'translateX(-50%)' },
+  { top: '0px', left: '0px', transform: 'translateX(-50%)' },
+  { top: '0px', left: '0px', transform: 'translateX(-50%)' }
+]);
+
+// Funciones para manejar los tooltips
+function showTooltip(event, index) {
+  updateTooltipPosition(event, index);
+  tooltipVisible.value[index] = true;
+}
+
+function hideTooltip(index) {
+  tooltipVisible.value[index] = false;
+}
+
+function updateTooltipPosition(event, index) {
+  const rect = event.currentTarget.getBoundingClientRect();
+  tooltipPositions.value[index] = {
+    top: `${rect.top - 40}px`,
+    left: `${rect.left + rect.width / 2}px`,
+    transform: 'translateX(-50%)'
+  };
+}
 </script>
 
 <style scoped>
@@ -1467,5 +1512,10 @@ html {
     transform: none;
     filter: none;
   }
+}
+
+/* Asegurar que los tooltips fijos estén siempre visibles */
+.fixed {
+  isolation: isolate;
 }
 </style>
