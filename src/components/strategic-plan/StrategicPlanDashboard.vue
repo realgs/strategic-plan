@@ -1,11 +1,11 @@
 <template>
-  <div class="strategic-plan-dashboard min-h-screen w-full relative">
+  <div class="strategic-plan-dashboard min-h-screen w-full relative overflow-hidden">
     <!-- Presentation Mode -->
     <div
       class="min-h-screen w-full absolute inset-0 transition-all duration-1000"
       :class="{
-        'opacity-100': isPresentationMode,
-        'opacity-0 pointer-events-none': !isPresentationMode
+        'opacity-100 z-10': isPresentationMode,
+        'opacity-0 pointer-events-none -z-10': !isPresentationMode
       }"
     >
       <div class="flex items-center justify-center min-h-screen">
@@ -34,16 +34,23 @@
               <div
                 v-for="(stat, index) in stats"
                 :key="stat.title"
-                class="stats-card p-4 rounded-lg cursor-pointer transform transition-all duration-300"
+                class="stats-card p-4 rounded-lg cursor-pointer transform transition-all duration-300 relative group"
                 :class="[
                   stat.bgClass,
                   {
                     'border border-green-400': clickedIndexes.includes(index),
-                    'hover:scale-105': !clickedIndexes.includes(index)
+                    'hover:scale-105': !clickedIndexes.includes(index),
+                    'animate-card-pulse': isPresentationMode && !clickedIndexes.includes(index)
                   }
                 ]"
                 @click="handleStatClick(index)"
               >
+                <div
+                  v-if="isPresentationMode && !clickedIndexes.includes(index)"
+                  class="absolute -top-2 left-1/2 transform -translate-x-1/2 px-2 py-0.5 bg-gray-700 bg-opacity-80 text-white text-xs rounded-full opacity-0 group-hover:opacity-80 tooltip-transition whitespace-nowrap"
+                >
+                  Click para continuar
+                </div>
                 <p class="text-sm text-gray-600">
                   {{ stat.title }}
                 </p>
@@ -62,10 +69,10 @@
 
     <!-- Full Content View -->
     <div
-      class="w-full transition-all duration-1000 transform"
+      class="w-full transition-all duration-1000 transform absolute inset-0"
       :class="{
-        'opacity-0 translate-y-full': isPresentationMode,
-        'opacity-100 translate-y-0': !isPresentationMode
+        'opacity-0 translate-y-full pointer-events-none -z-10': isPresentationMode,
+        'opacity-100 translate-y-0 z-10': !isPresentationMode
       }"
     >
       <!-- Rest of your content -->
@@ -782,11 +789,13 @@ function animateAllKPIs () {
 
 <style scoped>
 .strategic-plan-dashboard {
-  @apply bg-gray-50;
+  @apply bg-gray-50 select-none cursor-default;
+  min-height: 100vh;
+  height: 100%;
 }
 
 .stats-card {
-  @apply min-w-[200px];
+  @apply min-w-[200px] relative;
 }
 
 /* Smooth transitions */
@@ -865,5 +874,38 @@ function animateAllKPIs () {
 .kpi-fade-enter-active,
 .kpi-fade-leave-active {
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Update the safelist in tailwind.config.js to include these new classes */
+.z-10 {
+  z-index: 10;
+}
+
+.-z-10 {
+  z-index: -10;
+}
+
+@keyframes card-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.15);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.animate-card-pulse {
+  animation: card-pulse 3s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.tooltip-transition {
+  transition: opacity 0ms;
+}
+
+.group:hover .tooltip-transition {
+  transition: opacity 500ms 1000ms;
 }
 </style>

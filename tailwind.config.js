@@ -29,5 +29,12 @@ export default {
     'translate-y-0',
     'translate-y-full',
     'pointer-events-none',
+    'z-10',
+    '-z-10',
+    'overflow-hidden',
+    'group',
+    'group-hover:opacity-100',
+    '-translate-x-1/2',
+    'whitespace-nowrap'
   ]
 } 
