@@ -233,8 +233,7 @@
             <div
               v-for="(kpi, idx) in kpis"
               :key="idx"
-              class="border rounded-lg p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg"
-              @click="animateKPI(idx)"
+              class="border rounded-lg p-4 transform transition-all duration-300 hover:shadow-lg"
             >
               <h3 class="font-semibold text-gray-700">
                 {{ kpi.name }}
@@ -780,24 +779,13 @@ function selectQuarter (quarter) {
 }
 
 function animateKPI (index) {
-    const progress = kpiProgress.value[index];
-    kpiProgress.value[index] = 0;
-
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            kpiProgress.value[index] = kpis[index].progress;
-        });
-    });
+    // Eliminamos la animación al hacer click
+    return;
 }
 
 function animateAllKPIs () {
-    kpiProgress.value = kpiProgress.value.map(() => 0);
-
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            kpiProgress.value = kpis.map(kpi => kpi.progress);
-        });
-    });
+    // Solo animamos una vez al cargar
+    kpiProgress.value = kpis.map(kpi => kpi.progress);
 }
 
 // Función para obtener el texto del tooltip según el índice
