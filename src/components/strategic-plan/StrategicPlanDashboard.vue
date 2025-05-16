@@ -1,7 +1,12 @@
 <template>
   <!-- Add splash screen -->
   <div class="splash-screen" :class="{ 'hidden': !showSplash }">
-    <img src="/favicon.svg" alt="TalentoFlow Logo" class="splash-logo">
+    <img 
+      src="/assets/logo.svg" 
+      alt="TalentoFlow Logo" 
+      class="splash-logo"
+      @error="handleImageError"
+    >
     <div class="splash-text">TalentoFlow</div>
   </div>
 
@@ -1104,6 +1109,12 @@ function updateTooltipPosition(event, index) {
     left: `${rect.left + rect.width / 2}px`,
     transform: 'translateX(-50%)'
   };
+}
+
+// Add this in the script section
+function handleImageError(e) {
+  // Fallback to a default image or remove the image
+  e.target.style.display = 'none';
 }
 </script>
 
