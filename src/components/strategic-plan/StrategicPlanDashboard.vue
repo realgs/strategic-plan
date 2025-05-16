@@ -1,4 +1,10 @@
 <template>
+  <!-- Add splash screen -->
+  <div class="splash-screen" :class="{ 'hidden': !showSplash }">
+    <img src="/favicon.svg" alt="TalentoFlow Logo" class="splash-logo">
+    <div class="splash-text">TalentoFlow</div>
+  </div>
+
   <div class="strategic-plan-dashboard min-h-screen w-full relative"
        :class="{ 'overflow-hidden': isPresentationMode }"
        role="main"
@@ -896,6 +902,36 @@ onMounted(() => {
   // Show header immediately in presentation mode
   isHeaderVisible.value = true;
 
+  // Get splash screen elements
+  const splashLogo = document.querySelector('.splash-logo');
+  const splashText = document.querySelector('.splash-text');
+  const splashScreen = document.querySelector('.splash-screen');
+
+  // Wait for logo animation and text fade in to complete
+  let logoAnimationComplete = false;
+  let textAnimationComplete = false;
+
+  function checkAnimationsComplete() {
+    if (logoAnimationComplete && textAnimationComplete) {
+      // Add a small delay before hiding splash screen
+      requestAnimationFrame(() => {
+        showSplash.value = false;
+      });
+    }
+  }
+
+  // Listen for logo animation completion
+  splashLogo?.addEventListener('animationiteration', () => {
+    logoAnimationComplete = true;
+    checkAnimationsComplete();
+  });
+
+  // Listen for text fade in completion
+  splashText?.addEventListener('animationend', () => {
+    textAnimationComplete = true;
+    checkAnimationsComplete();
+  });
+
   // Only start observing sections after presentation mode is done
   if (!isPresentationMode.value) {
     const sections = [
@@ -924,6 +960,13 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  // Clean up event listeners
+  const splashLogo = document.querySelector('.splash-logo');
+  const splashText = document.querySelector('.splash-text');
+  
+  splashLogo?.removeEventListener('animationiteration', () => {});
+  splashText?.removeEventListener('animationend', () => {});
+  
   observer.disconnect();
   document.removeEventListener('keydown', handleKeyboardNavigation);
 });
@@ -1014,6 +1057,9 @@ function handleKeyboardNavigation(event) {
     }
   }
 }
+
+// Add splash screen state
+const showSplash = ref(true);
 </script>
 
 <style scoped>
@@ -1023,7 +1069,7 @@ function handleKeyboardNavigation(event) {
   cursor: default;
   min-height: 100vh;
   height: 100%;
-  position: fixed;
+  position: relative;
   inset: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1032,7 +1078,17 @@ function handleKeyboardNavigation(event) {
 }
 
 .strategic-plan-dashboard > div {
-  width: 100%;
+  position: absolute;
+  inset: 0;
+  transition: all 0.5s ease-out;
+}
+
+.strategic-plan-dashboard > div.opacity-0 {
+  pointer-events: none;
+}
+
+.strategic-plan-dashboard > div:not(.opacity-0) {
+  pointer-events: auto;
 }
 
 @media (min-width: 768px) {
@@ -1296,6 +1352,120 @@ html {
   
   .stats-card::before {
     display: none;
+  }
+}
+
+/* Add splash screen styles */
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: all 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform, opacity;
+}
+
+.splash-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.03) 70%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.splash-screen.hidden {
+  opacity: 0;
+  transform: scale(1.05) translateY(-10px);
+  pointer-events: none;
+}
+
+.splash-logo {
+  width: 120px;
+  height: 120px;
+  animation: float 1.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.splash-text {
+  margin-top: 20px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1F2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.3s ease-out forwards;
+  animation-delay: 0.05s;
+  will-change: transform, opacity;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .splash-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .splash-text {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-logo {
+    animation: none;
+    transform: none;
+  }
+
+  .splash-text {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .splash-screen {
+    transition: none;
+  }
+
+  .splash-screen.hidden {
+    opacity: 0;
+    transform: none;
+    filter: none;
   }
 }
 </style>
