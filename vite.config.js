@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/',
+  base: '/strategic-plan/',
   server: {
     port: 5173,
     host: true

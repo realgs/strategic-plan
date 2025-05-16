@@ -2,7 +2,7 @@
   <!-- Add splash screen -->
   <div class="splash-screen" :class="{ 'hidden': !showSplash }">
     <img 
-      src="/assets/logo.svg" 
+      :src="logoUrl"
       alt="TalentoFlow Logo" 
       class="splash-logo"
       @error="handleImageError"
@@ -688,6 +688,16 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed, Teleport } from 'vue';
+
+// Add this near the top of your script setup
+const baseUrl = computed(() => {
+  if (typeof import.meta !== 'undefined') {
+    return import.meta.env.BASE_URL;
+  }
+  return '/strategic-plan/';
+});
+
+const logoUrl = computed(() => `${baseUrl.value}assets/logo.svg`);
 
 const quarterlyObjectives = ref({
     Q1: [

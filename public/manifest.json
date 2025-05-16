@@ -9,7 +9,7 @@
   "theme_color": "#2563EB",
   "icons": [
     {
-      "src": "/assets/logo.svg",
+      "src": "/strategic-plan/assets/logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
