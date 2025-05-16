@@ -3,9 +3,9 @@
        :class="{ 'overflow-hidden': isPresentationMode }">
     <!-- Presentation Mode -->
     <div
-      class="min-h-screen w-full absolute inset-0 transition-all duration-1000"
+      class="min-h-screen w-full absolute inset-0 transition-all duration-300"
       :class="{
-        'opacity-100 z-10': isPresentationMode,
+        'opacity-100 z-20': isPresentationMode,
         'opacity-0 pointer-events-none -z-10': !isPresentationMode
       }"
     >
@@ -31,16 +31,28 @@
               </svg>
               Plan Estratégico LTI 2024
             </h1>
+            <div class="h-[24px] mb-8">
+              <div v-if="isPresentationMode" 
+                   class="flex justify-center gap-2 animate-fade-in">
+                <div v-for="i in 3" :key="i" 
+                     class="w-2 h-2 rounded-full transition-all duration-300 relative"
+                     :class="[
+                       clickCount >= i ? 'bg-blue-600 scale-110' : 'bg-gray-200',
+                       {'animate-ping-once': clickCount + 1 === i}
+                     ]">
+                </div>
+              </div>
+            </div>
             <div class="flex justify-center mt-4 space-x-4">
               <div
                 v-for="(stat, index) in stats"
                 :key="stat.title"
-                class="stats-card p-4 rounded-lg cursor-pointer transform transition-all duration-300 relative group"
+                class="stats-card p-6 rounded-lg cursor-pointer transform transition-all duration-300 relative group"
                 :class="[
                   stat.bgClass,
                   {
-                    'border border-green-400': clickedIndexes.includes(index),
-                    'hover:scale-105': !clickedIndexes.includes(index),
+                    'scale-105': clickedIndexes.includes(index),
+                    'hover:scale-105 hover:shadow-lg': !clickedIndexes.includes(index),
                     'animate-card-pulse': isPresentationMode && !clickedIndexes.includes(index)
                   }
                 ]"
@@ -48,20 +60,31 @@
               >
                 <div
                   v-if="isPresentationMode && !clickedIndexes.includes(index)"
-                  class="absolute -top-2 left-1/2 transform -translate-x-1/2 px-2 py-0.5 bg-gray-700 bg-opacity-80 text-white text-xs rounded-full opacity-0 group-hover:opacity-80 tooltip-transition whitespace-nowrap"
+                  class="absolute -top-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-gray-700 bg-opacity-90 text-white text-xs rounded-full opacity-0 group-hover:opacity-100 tooltip-transition whitespace-nowrap shadow-lg"
                 >
-                  Click para continuar
+                  {{ getTooltipText(index) }}
                 </div>
-                <p class="text-sm text-gray-600">
-                  {{ stat.title }}
-                </p>
-                <p
-                  class="text-2xl font-bold"
-                  :class="stat.textClass"
-                >
-                  {{ stat.value }} <span class="text-sm">{{ stat.detail }}</span>
-                </p>
+                <div class="relative z-10">
+                  <p class="text-sm text-gray-600 mb-1">
+                    {{ stat.title }}
+                  </p>
+                  <p
+                    class="text-2xl font-bold transition-all duration-300"
+                    :class="[
+                      stat.textClass,
+                      {'scale-110 transform': clickedIndexes.includes(index)}
+                    ]"
+                  >
+                    {{ stat.value }} <span class="text-sm">{{ stat.detail }}</span>
+                  </p>
+                </div>
               </div>
+            </div>
+            <div class="h-[40px] mt-8">
+              <p v-if="isPresentationMode && clickCount === 0" 
+                 class="text-gray-500 text-center">
+                Haz click en las tarjetas para explorar el plan estratégico
+              </p>
             </div>
           </div>
         </div>
@@ -101,7 +124,7 @@
             <div
               v-for="(stat, index) in stats"
               :key="stat.title"
-              class="stats-card p-4 rounded-lg"
+              class="stats-card p-6 rounded-lg"
               :class="stat.bgClass"
             >
               <p class="text-sm text-gray-600">
@@ -718,48 +741,38 @@ onUnmounted(() => {
 
 // Interactive functions
 function handleStatClick (index) {
-    // Only add if not already clicked
     if (!clickedIndexes.value.includes(index)) {
         clickedIndexes.value.push(index);
         clickCount.value++;
 
-        console.log('Clicked indexes:', clickedIndexes.value);
-
         if (clickCount.value >= 3) {
             setTimeout(() => {
                 startMainPresentation();
-            }, 500);
+            }, 300);
         }
     }
 }
 
 function startMainPresentation () {
     hasStartedPresentation.value = true;
+    isPresentationMode.value = false;
 
-    // Show full content
-    setTimeout(() => {
-        isPresentationMode.value = false;
-    }, 100);
-
-    // Show all sections and animate KPIs
+    // Show sections sequentially
     setTimeout(() => {
         isTimelineVisible.value = true;
         isKpiVisible.value = true;
         isBudgetVisible.value = true;
         isTeamVisible.value = true;
         isRiskVisible.value = true;
+    }, 100);
 
-        // Trigger KPI animations
-        kpiProgress.value = kpis.map(() => 0);
-        setTimeout(() => {
-            kpiProgress.value = kpis.map(kpi => kpi.progress);
-        }, 50);
-    }, 200);
-
-    // Scroll to top
+    // Trigger KPI animations
     setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 300);
+        kpiProgress.value = kpis.map(() => 0);
+        requestAnimationFrame(() => {
+            kpiProgress.value = kpis.map(kpi => kpi.progress);
+        });
+    }, 600);
 }
 
 function selectQuarter (quarter) {
@@ -786,18 +799,36 @@ function animateAllKPIs () {
         });
     });
 }
+
+// Función para obtener el texto del tooltip según el índice
+function getTooltipText(index) {
+    if (clickCount.value === 0) return 'Click para empezar';
+    const remaining = 3 - clickCount.value;
+    return `${remaining} click${remaining > 1 ? 's' : ''} más para continuar`;
+}
 </script>
 
 <style scoped>
 .strategic-plan-dashboard {
-  @apply bg-gray-50 select-none cursor-default pr-[17px];
+  background-color: rgb(249 250 251);
+  user-select: none;
+  cursor: default;
   min-height: 100vh;
   height: 100%;
+  position: fixed;
+  inset: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
-/* Para evitar el doble padding en modo presentación */
+.strategic-plan-dashboard > div {
+  width: 100%;
+  max-width: calc(100vw - 17px); /* Ancho total menos el ancho del scrollbar */
+}
+
+/* Eliminar el cambio de padding en modo presentación */
 .strategic-plan-dashboard.overflow-hidden {
-  @apply pr-0;
+  overflow: hidden;
 }
 
 /* Estilos personalizados para la barra de scroll */
@@ -827,7 +858,8 @@ function animateAllKPIs () {
 }
 
 .stats-card {
-  @apply min-w-[200px] relative;
+  @apply min-w-[200px] relative shadow-sm;
+  transition: all 0.3s ease;
 }
 
 /* Smooth transitions */
@@ -838,7 +870,7 @@ function animateAllKPIs () {
 /* Add new transition for presentation mode */
 .presentation-enter-active,
 .presentation-leave-active {
-  transition: all 1s ease;
+  transition: all 0.3s ease;
 }
 
 .presentation-enter-from,
@@ -939,5 +971,41 @@ function animateAllKPIs () {
 
 .group:hover .tooltip-transition {
   transition: opacity 500ms 1000ms;
+}
+
+/* Mejoras en la tipografía */
+h1, h2 {
+  @apply tracking-tight;
+}
+
+.text-2xl {
+  @apply tracking-tight leading-tight;
+}
+
+/* Efecto de glass morphism para las cards */
+.stats-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.5rem;
+  padding: 2px;
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Mejoras en la accesibilidad del foco */
+.stats-card:focus {
+  @apply outline-none ring-2 ring-blue-400 ring-offset-2;
+}
+
+/* Animación suave para el scroll */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
+  @apply antialiased;
 }
 </style>
