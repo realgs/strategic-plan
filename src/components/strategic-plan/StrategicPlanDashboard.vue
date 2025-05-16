@@ -510,6 +510,89 @@
             </div>
           </TransitionGroup>
         </div>
+
+        <!-- Sección Motivadora -->
+        <div
+          ref="motivationalSection"
+          class="bg-white rounded-xl p-6 shadow-sm transition-all duration-500 mb-8"
+          :class="{ 'opacity-0 translate-y-10': !isMotivationalVisible, 'opacity-100 translate-y-0': isMotivationalVisible }"
+          data-section="motivational"
+        >
+          <h2 class="text-xl font-bold mb-6 text-center flex items-center justify-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-blue-600"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+              />
+            </svg>
+            Nuestro Camino hacia el Éxito
+          </h2>
+          
+          <div class="space-y-6">
+            <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-6">
+              <h3 class="text-lg font-semibold text-blue-800 mb-3">Lo que hemos logrado juntos</h3>
+              <ul class="space-y-2 text-blue-700">
+                <li class="flex items-start gap-2">
+                  <svg class="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>Gracias a vuestro esfuerzo incansable, hemos construido una plataforma que está transformando la industria del reclutamiento</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <svg class="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>Vuestra dedicación nos ha permitido conquistar mercados internacionales, demostrando que la excelencia no tiene fronteras</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <svg class="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>Habéis creado una experiencia excepcional que nuestros clientes adoran, como demuestran nuestras increíbles tasas de retención</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-6">
+              <h3 class="text-lg font-semibold text-green-800 mb-3">A dónde vamos</h3>
+              <ul class="space-y-2 text-green-700">
+                <li class="flex items-start gap-2">
+                  <svg class="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>Llevaremos nuestra innovación al mercado español, donde ya hay equipos esperando para utilizar nuestra tecnología</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <svg class="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>Seguiremos siendo pioneros en IA y automatización, marcando el camino que otros seguirán</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <svg class="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>Con vuestro talento y pasión, transformaremos la manera en que las empresas encuentran y nutren el talento del futuro</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-6">
+              <h3 class="text-lg font-semibold text-purple-800 mb-3">Nuestro Compromiso</h3>
+              <p class="text-purple-700 leading-relaxed">
+                Estamos construyendo el futuro de la gestión del talento. Con una inversión estratégica de 500K€, un equipo de expertos apasionados y tecnología de vanguardia, nos comprometemos a revolucionar la forma en que las empresas encuentran y contratan talento. Juntos, no solo estamos creando una plataforma; estamos definiendo un nuevo estándar en la industria del reclutamiento.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -694,9 +777,11 @@ const kpiSection = ref(null);
 const budgetSection = ref(null);
 const teamSection = ref(null);
 const riskSection = ref(null);
+const motivationalSection = ref(null);
 const isBudgetVisible = ref(false);
 const isTeamVisible = ref(false);
 const isRiskVisible = ref(false);
+const isMotivationalVisible = ref(false);
 
 const isPresentationMode = ref(true);
 const hasStartedPresentation = ref(false);
@@ -724,6 +809,9 @@ const observer = new IntersectionObserver((entries) => {
         case 'risk':
             isRiskVisible.value = entry.isIntersecting;
             break;
+        case 'motivational':
+            isMotivationalVisible.value = entry.isIntersecting;
+            break;
         }
     });
 }, { threshold: 0.2 });
@@ -740,6 +828,7 @@ onMounted(() => {
             { ref: budgetSection.value, id: 'budget' },
             { ref: teamSection.value, id: 'team' },
             { ref: riskSection.value, id: 'risk' },
+            { ref: motivationalSection.value, id: 'motivational' },
         ];
 
         sections.forEach(({ ref, id }) => {
@@ -780,6 +869,7 @@ function startMainPresentation () {
         isBudgetVisible.value = true;
         isTeamVisible.value = true;
         isRiskVisible.value = true;
+        isMotivationalVisible.value = true;
     }, 100);
 
     // Trigger KPI animations
