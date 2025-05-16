@@ -238,10 +238,19 @@
             <div
               v-for="(kpi, idx) in kpis"
               :key="idx"
-              class="border rounded-lg p-4 transform transition-all duration-300 hover:shadow-lg"
+              class="border rounded-lg p-4 transform transition-all duration-300 hover:shadow-lg hover:scale-105 relative group"
             >
-              <h3 class="font-semibold text-gray-700">
+              <h3 class="font-semibold text-gray-700 flex items-center gap-2">
                 {{ kpi.name }}
+                <div v-if="kpi.name === 'CLTV'" class="hidden md:inline-flex items-center relative group/tooltip">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                       class="w-4 h-4 text-gray-500 cursor-help">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                  </svg>
+                  <div class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-gray-700 bg-opacity-90 text-white text-xs rounded-full opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-lg pointer-events-none">
+                    Customer Lifetime Value: Valor total que un cliente genera durante su relación con la empresa
+                  </div>
+                </div>
               </h3>
               <div class="mt-2">
                 <div class="flex justify-between text-sm">
@@ -403,11 +412,6 @@
                 </div>
                 <div class="relative">
                   <div class="flex items-center justify-end gap-2 mt-5 sm:mt-7 bg-yellow-50 border border-yellow-200 rounded-lg p-2 pr-3 group hover:bg-yellow-100 transition-all duration-300 cursor-default">
-                    <!-- Flecha Heroicon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
-                         class="hidden md:block w-6 h-6 sm:w-8 sm:h-8 text-yellow-600 absolute -top-6 sm:-top-8 right-6 sm:right-8 group-hover:translate-y-1 transition-transform duration-300">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 4.5l-15 15m0 0h11.25m-11.25 0V8.25" />
-                    </svg>
                     <span class="text-xs sm:text-sm font-medium text-yellow-800 group-hover:text-yellow-900 transition-colors duration-300">
                       ¡Pago yo los 200€ que faltan!
                     </span>
