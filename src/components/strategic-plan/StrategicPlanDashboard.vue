@@ -29,7 +29,7 @@
                   d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"
                 />
               </svg>
-              Plan Estratégico LTI 2024
+              Plan Estratégico LTI 2025
             </h1>
             <div class="h-[24px] mb-8">
               <div v-if="isPresentationMode" 
@@ -43,7 +43,7 @@
                 </div>
               </div>
             </div>
-            <div class="flex justify-center mt-4 space-x-4">
+            <div class="flex justify-center mt-4 space-x-10">
               <div
                 v-for="(stat, index) in stats"
                 :key="stat.title"
@@ -65,7 +65,8 @@
                   {{ getTooltipText(index) }}
                 </div>
                 <div class="relative z-10">
-                  <p class="text-sm text-gray-600 mb-1">
+                  <p class="text-base text-gray-600 mb-1 transition-all duration-300"
+                    :class="{'scale-110 transform': clickedIndexes.includes(index)}">
                     {{ stat.title }}
                   </p>
                   <p
@@ -82,7 +83,7 @@
             </div>
             <div class="h-[40px] mt-8">
               <p v-if="isPresentationMode && clickCount === 0" 
-                 class="text-gray-500 text-center">
+                 class="text-gray-500 text-center animate-text-pulse">
                 Haz click en las tarjetas para explorar el plan estratégico
               </p>
             </div>
@@ -118,7 +119,7 @@
                 d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"
               />
             </svg>
-            Plan Estratégico LTI 2024
+            Plan Estratégico LTI 2025
           </h1>
           <div class="flex justify-center mt-4 space-x-4">
             <div
@@ -127,15 +128,17 @@
               class="stats-card p-6 rounded-lg"
               :class="stat.bgClass"
             >
-              <p class="text-sm text-gray-600">
-                {{ stat.title }}
-              </p>
-              <p
-                class="text-2xl font-bold"
-                :class="stat.textClass"
-              >
-                {{ stat.value }} <span class="text-sm">{{ stat.detail }}</span>
-              </p>
+              <div class="relative z-10">
+                <p class="text-base text-gray-600">
+                  {{ stat.title }}
+                </p>
+                <p
+                  class="text-2xl font-bold"
+                  :class="stat.textClass"
+                >
+                  {{ stat.value }} <span class="text-sm">{{ stat.detail }}</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -399,6 +402,18 @@
                     TOTAL
                   </span>
                   <span class="font-bold">500.200€</span>
+                </div>
+                <div class="relative">
+                  <div class="flex items-center justify-end gap-2 mt-7 bg-yellow-50 border border-yellow-200 rounded-lg p-2 pr-3 group hover:bg-yellow-100 transition-all duration-300 cursor-default">
+                    <!-- Flecha Heroicon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                         class="w-8 h-8 text-yellow-600 absolute -top-8 right-8 group-hover:translate-y-1 transition-transform duration-300">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 4.5l-15 15m0 0h11.25m-11.25 0V8.25" />
+                    </svg>
+                    <span class="text-sm font-medium text-yellow-800 group-hover:text-yellow-900 transition-colors duration-300">
+                      ¡Pago yo los 200€ que faltan!
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -995,5 +1010,14 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 2rem;
   @apply antialiased;
+}
+
+@keyframes text-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.animate-text-pulse {
+  animation: text-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 </style>
