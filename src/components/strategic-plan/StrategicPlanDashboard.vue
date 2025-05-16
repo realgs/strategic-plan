@@ -1,6 +1,8 @@
 <template>
   <div class="strategic-plan-dashboard min-h-screen w-full relative"
-       :class="{ 'overflow-hidden': isPresentationMode }">
+       :class="{ 'overflow-hidden': isPresentationMode }"
+       role="main"
+       aria-label="Plan Estratégico LTI 2025">
     <!-- Presentation Mode -->
     <div
       class="min-h-screen w-full absolute inset-0 transition-all duration-300"
@@ -8,6 +10,8 @@
         'opacity-100 z-20': isPresentationMode,
         'opacity-0 pointer-events-none -z-10': !isPresentationMode
       }"
+      role="region"
+      aria-label="Modo presentación"
     >
       <div class="flex items-center justify-center min-h-screen">
         <div class="max-w-5xl p-6">
@@ -59,6 +63,11 @@
                   }
                 ]"
                 @click="handleStatClick(index)"
+                role="button"
+                :aria-label="'Ver detalles de ' + stat.title"
+                tabindex="0"
+                @keydown.enter="handleStatClick(index)"
+                @keydown.space.prevent="handleStatClick(index)"
               >
                 <div
                   v-if="isPresentationMode && !clickedIndexes.includes(index)"
@@ -566,8 +575,16 @@
               </ul>
               <div class="mt-6 -mx-6 -mb-6 relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop"
-                  alt="Equipo celebrando con champán"
+                  src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200"
+                  srcset="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=600 600w,
+                          https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=900 900w,
+                          https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200 1200w"
+                  sizes="(max-width: 640px) 600px,
+                         (max-width: 768px) 900px,
+                         1200px"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Equipo celebrando con champán - Un grupo diverso de profesionales brindando por el éxito"
                   class="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover object-center transform hover:scale-105 transition-transform duration-500"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
@@ -603,8 +620,16 @@
               </ul>
               <div class="mt-6 -mx-6 -mb-6 relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop"
-                  alt="Infraestructura tecnológica y automatización"
+                  src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200"
+                  srcset="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=600 600w,
+                          https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=900 900w,
+                          https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200 1200w"
+                  sizes="(max-width: 640px) 600px,
+                         (max-width: 768px) 900px,
+                         1200px"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Infraestructura tecnológica y automatización - Centro de datos moderno con servidores y conexiones de red"
                   class="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover object-center transform hover:scale-105 transition-transform duration-500"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-green-900/20 to-transparent"></div>
@@ -623,8 +648,16 @@
               </p>
               <div class="mt-6 -mx-6 -mb-6 relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1560264280-88b68371db39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop"
-                  alt="Candidata firmando contrato"
+                  src="https://images.unsplash.com/photo-1560264280-88b68371db39?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200"
+                  srcset="https://images.unsplash.com/photo-1560264280-88b68371db39?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=600 600w,
+                          https://images.unsplash.com/photo-1560264280-88b68371db39?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=900 900w,
+                          https://images.unsplash.com/photo-1560264280-88b68371db39?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200 1200w"
+                  sizes="(max-width: 640px) 600px,
+                         (max-width: 768px) 900px,
+                         1200px"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Candidata firmando contrato - Profesional en traje formal firmando documentos en una oficina moderna"
                   class="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover object-center transform hover:scale-105 transition-transform duration-500"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-purple-900/20 to-transparent"></div>
@@ -640,7 +673,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
-const quarterlyObjectives = {
+const quarterlyObjectives = ref({
     Q1: [
         'Automatización de publicación en 5 portales',
         'API de integración con portales principales',
@@ -665,7 +698,7 @@ const quarterlyObjectives = {
         'Alcanzar 500k perfiles',
         'Consolidar ventas en España',
     ],
-};
+});
 
 const quarterlyMilestones = {
     Q1: '200+ perfiles/día y 5 portales integrados',
@@ -827,60 +860,72 @@ const hasStartedPresentation = ref(false);
 const clickedIndexes = ref([]);
 const clickCount = ref(0);
 
-// Update the observer
+// Add intersection observer options for better performance
+const observerOptions = {
+  threshold: 0.2,
+  rootMargin: '50px 0px',
+};
+
+// Optimize the observer
 const observer = new IntersectionObserver((entries) => {
+  requestAnimationFrame(() => {
     entries.forEach((entry) => {
-        const sectionId = entry.target.dataset.section;
-        switch (sectionId) {
-        case 'timeline':
-            isTimelineVisible.value = entry.isIntersecting;
-            break;
-        case 'kpi':
-            isKpiVisible.value = entry.isIntersecting;
-            if (entry.isIntersecting) animateAllKPIs();
-            break;
-        case 'budget':
-            isBudgetVisible.value = entry.isIntersecting;
-            break;
-        case 'team':
-            isTeamVisible.value = entry.isIntersecting;
-            break;
-        case 'risk':
-            isRiskVisible.value = entry.isIntersecting;
-            break;
-        case 'motivational':
-            isMotivationalVisible.value = entry.isIntersecting;
-            break;
-        }
+      const sectionId = entry.target.dataset.section;
+      if (!sectionId) return;
+      
+      const sectionMap = {
+        timeline: () => isTimelineVisible.value = entry.isIntersecting,
+        kpi: () => {
+          isKpiVisible.value = entry.isIntersecting;
+          if (entry.isIntersecting) animateAllKPIs();
+        },
+        budget: () => isBudgetVisible.value = entry.isIntersecting,
+        team: () => isTeamVisible.value = entry.isIntersecting,
+        risk: () => isRiskVisible.value = entry.isIntersecting,
+        motivational: () => isMotivationalVisible.value = entry.isIntersecting
+      };
+      
+      sectionMap[sectionId]?.();
     });
-}, { threshold: 0.2 });
+  });
+}, observerOptions);
 
 onMounted(() => {
-    // Show header immediately in presentation mode
-    isHeaderVisible.value = true;
+  document.addEventListener('keydown', handleKeyboardNavigation);
+  
+  // Show header immediately in presentation mode
+  isHeaderVisible.value = true;
 
-    // Only start observing sections after presentation mode is done
-    if (!isPresentationMode.value) {
-        const sections = [
-            { ref: timelineSection.value, id: 'timeline' },
-            { ref: kpiSection.value, id: 'kpi' },
-            { ref: budgetSection.value, id: 'budget' },
-            { ref: teamSection.value, id: 'team' },
-            { ref: riskSection.value, id: 'risk' },
-            { ref: motivationalSection.value, id: 'motivational' },
-        ];
+  // Only start observing sections after presentation mode is done
+  if (!isPresentationMode.value) {
+    const sections = [
+      { ref: timelineSection.value, id: 'timeline' },
+      { ref: kpiSection.value, id: 'kpi' },
+      { ref: budgetSection.value, id: 'budget' },
+      { ref: teamSection.value, id: 'team' },
+      { ref: riskSection.value, id: 'risk' },
+      { ref: motivationalSection.value, id: 'motivational' },
+    ];
 
-        sections.forEach(({ ref, id }) => {
-            if (ref) {
-                ref.dataset.section = id;
-                observer.observe(ref);
-            }
-        });
-    }
+    sections.forEach(({ ref, id }) => {
+      if (ref) {
+        ref.dataset.section = id;
+        observer.observe(ref);
+      }
+    });
+  }
+
+  if (timelineSection.value) timelineSection.value.setAttribute('aria-label', ariaLabels.timelineSection);
+  if (kpiSection.value) kpiSection.value.setAttribute('aria-label', ariaLabels.kpiSection);
+  if (budgetSection.value) budgetSection.value.setAttribute('aria-label', ariaLabels.budgetSection);
+  if (teamSection.value) teamSection.value.setAttribute('aria-label', ariaLabels.teamSection);
+  if (riskSection.value) riskSection.value.setAttribute('aria-label', ariaLabels.riskSection);
+  if (motivationalSection.value) motivationalSection.value.setAttribute('aria-label', ariaLabels.motivationalSection);
 });
 
 onUnmounted(() => {
-    observer.disconnect();
+  observer.disconnect();
+  document.removeEventListener('keydown', handleKeyboardNavigation);
 });
 
 // Interactive functions
@@ -940,6 +985,35 @@ function getTooltipText(index) {
     const remaining = 3 - clickCount.value;
     return `${remaining} click${remaining > 1 ? 's' : ''} más para continuar`;
 }
+
+// Add aria labels for better accessibility
+const ariaLabels = {
+    timelineSection: 'Línea de tiempo trimestral con objetivos y metas',
+    kpiSection: 'Indicadores clave de rendimiento y métricas',
+    budgetSection: 'Distribución del presupuesto y asignaciones',
+    teamSection: 'Estructura del equipo y roles',
+    riskSection: 'Análisis de riesgos y planes de mitigación',
+    motivationalSection: 'Logros, metas y compromiso del equipo'
+};
+
+// Add keyboard navigation support
+function handleKeyboardNavigation(event) {
+  if (event.key === 'Tab') {
+    const focusableElements = document.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    if (event.shiftKey && document.activeElement === firstFocusable) {
+      lastFocusable.focus();
+      event.preventDefault();
+    } else if (!event.shiftKey && document.activeElement === lastFocusable) {
+      firstFocusable.focus();
+      event.preventDefault();
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -954,6 +1028,7 @@ function getTooltipText(index) {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  content-visibility: auto;
 }
 
 .strategic-plan-dashboard > div {
@@ -1024,6 +1099,8 @@ function getTooltipText(index) {
 .stats-card {
   @apply min-w-[200px] relative shadow-sm;
   transition: all 0.3s ease;
+  contain: content;
+  will-change: transform;
 }
 
 /* Smooth transitions */
@@ -1148,22 +1225,12 @@ h1, h2 {
 
 /* Efecto de glass morphism para las cards */
 .stats-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 0.5rem;
-  padding: 2px;
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+  display: none;
 }
 
-/* Mejoras en la accesibilidad del foco */
+/* Remove the focus ring styles */
 .stats-card:focus {
-  @apply outline-none ring-2 ring-blue-400 ring-offset-2;
+  @apply outline-none;
 }
 
 /* Animación suave para el scroll */
@@ -1180,5 +1247,55 @@ html {
 
 .animate-text-pulse {
   animation: text-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Add prefers-reduced-motion media query */
+@media (prefers-reduced-motion: reduce) {
+  .transition-all,
+  .transform,
+  .animate-pulse-subtle,
+  .animate-card-pulse,
+  .animate-text-pulse {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* Add print styles */
+@media print {
+  .strategic-plan-dashboard {
+    position: static;
+    overflow: visible;
+    height: auto;
+  }
+
+  .stats-card,
+  .rounded-lg {
+    break-inside: avoid;
+  }
+
+  .hover\:scale-105:hover,
+  .hover\:shadow-lg:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Optimize CSS selectors */
+.stats-card {
+  contain: content;
+  will-change: transform;
+}
+
+/* Add high contrast mode support */
+@media (forced-colors: active) {
+  .stats-card {
+    border: 1px solid CanvasText;
+  }
+  
+  .stats-card::before {
+    display: none;
+  }
 }
 </style>
