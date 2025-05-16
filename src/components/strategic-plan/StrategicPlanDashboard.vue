@@ -125,7 +125,7 @@
       <!-- Rest of your content -->
       <div class="max-w-5xl mx-auto p-6 space-y-8">
         <!-- Header Section -->
-        <div class="bg-white rounded-xl p-10 shadow-sm">
+        <div class="bg-white rounded-xl p-10 shadow-sm hidden md:block">
           <h1 class="text-3xl font-bold text-gray-800 text-center mb-12 flex items-center justify-center gap-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
