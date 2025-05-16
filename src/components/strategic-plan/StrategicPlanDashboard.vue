@@ -922,35 +922,10 @@ onMounted(() => {
   // Show header immediately in presentation mode
   isHeaderVisible.value = true;
 
-  // Get splash screen elements
-  const splashLogo = document.querySelector('.splash-logo');
-  const splashText = document.querySelector('.splash-text');
-  const splashScreen = document.querySelector('.splash-screen');
-
-  // Wait for logo animation and text fade in to complete
-  let logoAnimationComplete = false;
-  let textAnimationComplete = false;
-
-  function checkAnimationsComplete() {
-    if (logoAnimationComplete && textAnimationComplete) {
-      // Add a small delay before hiding splash screen
-      requestAnimationFrame(() => {
-        showSplash.value = false;
-      });
-    }
-  }
-
-  // Listen for logo animation completion
-  splashLogo?.addEventListener('animationiteration', () => {
-    logoAnimationComplete = true;
-    checkAnimationsComplete();
-  });
-
-  // Listen for text fade in completion
-  splashText?.addEventListener('animationend', () => {
-    textAnimationComplete = true;
-    checkAnimationsComplete();
-  });
+  // Hide splash screen after a short delay
+  setTimeout(() => {
+    showSplash.value = false;
+  }, 2000); // 2 seconds delay
 
   // Only start observing sections after presentation mode is done
   if (!isPresentationMode.value) {
