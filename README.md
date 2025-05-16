@@ -1,6 +1,6 @@
 # Strategic Plan Dashboard
 
-A modern, interactive dashboard for visualizing the LTI 2024 Strategic Plan.
+A modern, interactive dashboard for visualizing the LTI 2025 Strategic Plan.
 
 ## Features
 
