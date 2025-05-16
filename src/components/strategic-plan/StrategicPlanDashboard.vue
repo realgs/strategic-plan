@@ -12,16 +12,16 @@
       <div class="flex items-center justify-center min-h-screen">
         <div class="max-w-5xl p-6">
           <div
-            class="bg-white rounded-xl p-10 shadow-sm transition-all duration-500 transform"
+            class="bg-white rounded-xl p-4 sm:p-6 md:p-10 shadow-sm transition-all duration-500 transform"
           >
-            <h1 class="text-3xl font-bold text-gray-800 text-center mb-12 flex items-center justify-center gap-3">
+            <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 text-center mb-6 sm:mb-8 md:mb-12 flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-8 h-8 text-blue-600"
+                class="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-blue-600"
               >
                 <path
                   stroke-linecap="round"
@@ -43,7 +43,7 @@
                 </div>
               </div>
             </div>
-            <div class="flex justify-center mt-4 space-x-10">
+            <div class="flex flex-col md:grid md:grid-cols-3 mt-4 gap-4 md:gap-8 max-w-[320px] md:max-w-none mx-auto md:mx-0">
               <div
                 v-for="(stat, index) in stats"
                 :key="stat.title"
@@ -53,7 +53,9 @@
                   {
                     'scale-105': clickedIndexes.includes(index),
                     'hover:scale-105 hover:shadow-lg': !clickedIndexes.includes(index),
-                    'animate-card-pulse': isPresentationMode && !clickedIndexes.includes(index)
+                    'animate-card-pulse': isPresentationMode && !clickedIndexes.includes(index),
+                    'w-full': isPresentationMode,
+                    'flex-shrink-0 w-[320px] snap-center': !isPresentationMode
                   }
                 ]"
                 @click="handleStatClick(index)"
@@ -65,25 +67,25 @@
                   {{ getTooltipText(index) }}
                 </div>
                 <div class="relative z-10">
-                  <p class="text-base text-gray-600 mb-1 transition-all duration-300"
+                  <p class="text-base sm:text-sm md:text-base text-gray-600 mb-2 sm:mb-1 transition-all duration-300"
                     :class="{'scale-110 transform': clickedIndexes.includes(index)}">
                     {{ stat.title }}
                   </p>
                   <p
-                    class="text-2xl font-bold transition-all duration-300"
+                    class="text-2xl sm:text-xl md:text-2xl font-bold transition-all duration-300"
                     :class="[
                       stat.textClass,
                       {'scale-110 transform': clickedIndexes.includes(index)}
                     ]"
                   >
-                    {{ stat.value }} <span class="text-sm">{{ stat.detail }}</span>
+                    {{ stat.value }} <span class="text-sm sm:text-xs md:text-sm">{{ stat.detail }}</span>
                   </p>
                 </div>
               </div>
             </div>
             <div class="h-[40px] mt-8">
               <p v-if="isPresentationMode && clickCount === 0" 
-                 class="text-gray-500 text-center animate-text-pulse">
+                 class="text-xs sm:text-sm md:text-base text-gray-500 text-center animate-text-pulse px-4 mx-auto max-w-[280px] sm:max-w-none">
                 Haz click en las tarjetas para explorar el plan estratégico
               </p>
             </div>
@@ -121,7 +123,7 @@
             </svg>
             Plan Estratégico LTI 2025
           </h1>
-          <div class="flex justify-center mt-4 space-x-4">
+          <div class="flex flex-col md:flex-row justify-center mt-4 gap-4">
             <div
               v-for="(stat, index) in stats"
               :key="stat.title"
@@ -146,17 +148,17 @@
         <!-- Quarterly Timeline -->
         <div
           ref="timelineSection"
-          class="bg-white rounded-xl p-6 shadow-sm transition-all duration-500"
+          class="bg-white rounded-xl p-4 sm:p-6 shadow-sm transition-all duration-500"
           :class="{ 'opacity-0 translate-y-10': !isTimelineVisible, 'opacity-100 translate-y-0': isTimelineVisible }"
         >
-          <h2 class="text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
+          <h2 class="text-lg sm:text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6 text-blue-600"
+              class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
             >
               <path
                 stroke-linecap="round"
@@ -169,19 +171,19 @@
           <TransitionGroup
             name="quarters-fade"
             tag="div"
-            class="grid grid-cols-4 gap-4 w-full"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 w-full"
           >
             <div
               v-for="quarter in ['Q1', 'Q2', 'Q3', 'Q4']"
               :key="quarter"
-              class="border rounded-lg p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg w-full"
-              :class="{ 'scale-105': selectedQuarter === quarter }"
+              class="border rounded-lg p-3 sm:p-4 cursor-pointer transform transition-all duration-300 hover:shadow-lg w-full"
+              :class="{ 'scale-[1.02]': selectedQuarter === quarter }"
               @click="selectQuarter(quarter)"
             >
-              <h3 class="font-bold text-lg text-blue-600">
+              <h3 class="font-bold text-base sm:text-lg text-blue-600">
                 {{ quarter }}
               </h3>
-              <ul class="mt-2 space-y-2 text-sm">
+              <ul class="mt-2 space-y-2 text-[14px] sm:text-sm">
                 <TransitionGroup name="list">
                   <li
                     v-for="(objective, idx) in quarterlyObjectives[quarter]"
@@ -194,10 +196,10 @@
                 </TransitionGroup>
               </ul>
               <div class="mt-4 pt-4 border-t">
-                <p class="text-sm font-semibold text-gray-700">
+                <p class="text-[14px] font-semibold text-gray-700">
                   Milestone:
                 </p>
-                <p class="text-sm text-gray-600">
+                <p class="text-[14px] text-gray-600">
                   {{ quarterlyMilestones[quarter] }}
                 </p>
               </div>
@@ -208,17 +210,17 @@
         <!-- KPI Tracking -->
         <div
           ref="kpiSection"
-          class="bg-white rounded-xl p-6 shadow-sm transition-all duration-500"
+          class="bg-white rounded-xl p-4 sm:p-6 shadow-sm transition-all duration-500"
           :class="{ 'opacity-0 translate-y-10': !isKpiVisible, 'opacity-100 translate-y-0': isKpiVisible }"
         >
-          <h2 class="text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
+          <h2 class="text-lg sm:text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6 text-blue-600"
+              class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
             >
               <path
                 stroke-linecap="round"
@@ -231,7 +233,7 @@
           <TransitionGroup
             name="kpi-fade"
             tag="div"
-            class="grid grid-cols-3 gap-4"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4"
           >
             <div
               v-for="(kpi, idx) in kpis"
@@ -271,10 +273,10 @@
         <!-- Budget Allocation -->
         <div
           ref="budgetSection"
-          class="bg-white rounded-xl p-6 shadow-sm"
+          class="bg-white rounded-xl p-4 sm:p-6 shadow-sm"
           :class="{ 'opacity-0 translate-y-10': !isBudgetVisible, 'opacity-100 translate-y-0': isBudgetVisible }"
         >
-          <h2 class="text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
+          <h2 class="text-lg sm:text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -293,10 +295,10 @@
           </h2>
           <div class="flex justify-center">
             <div class="w-full max-w-4xl space-y-4">
-              <div class="grid grid-cols-2 gap-8">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                 <!-- Salarios Column -->
                 <div class="space-y-3">
-                  <h3 class="font-semibold text-gray-800 border-b pb-2 flex items-center gap-2">
+                  <h3 class="font-semibold text-gray-800 border-b pb-2 flex items-center gap-2 text-sm sm:text-base">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -316,23 +318,19 @@
                   <div
                     v-for="(item, idx) in salaryItems"
                     :key="idx"
-                    class="flex justify-between items-center p-2 rounded-lg transition-all duration-300 hover:bg-blue-50 hover:shadow-sm transform hover:-translate-y-0.5"
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg transition-all duration-300 hover:bg-blue-50 hover:shadow-sm transform hover:-translate-y-0.5 gap-2 sm:gap-0"
                   >
                     <div>
-                      <span class="text-gray-700 font-medium">{{ item.name }}</span>
-                      <span class="text-sm text-gray-500 block">{{ item.details }}</span>
+                      <span class="text-gray-700 font-medium text-sm sm:text-base">{{ item.name }}</span>
+                      <span class="text-xs sm:text-sm text-gray-500 block">{{ item.details }}</span>
                     </div>
-                    <span class="font-semibold text-blue-600">{{ item.amount }}€</span>
-                  </div>
-                  <div class="flex justify-between items-center pt-2 border-t font-semibold text-gray-800 p-2 bg-blue-50 rounded-lg mt-4">
-                    <span>Total Salarios</span>
-                    <span class="text-blue-700">391.200€</span>
+                    <span class="font-semibold text-blue-600 text-sm sm:text-base">{{ item.amount }}€</span>
                   </div>
                 </div>
 
                 <!-- Infrastructure Column -->
                 <div class="space-y-3">
-                  <h3 class="font-semibold text-gray-800 border-b pb-2 flex items-center gap-2">
+                  <h3 class="font-semibold text-gray-800 border-b pb-2 flex items-center gap-2 text-sm sm:text-base">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -352,17 +350,17 @@
                   <div
                     v-for="(item, idx) in infrastructureItems"
                     :key="idx"
-                    class="flex justify-between items-center p-2 rounded-lg transition-all duration-300 hover:bg-emerald-50 hover:shadow-sm transform hover:-translate-y-0.5"
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg transition-all duration-300 hover:bg-emerald-50 hover:shadow-sm transform hover:-translate-y-0.5 gap-2 sm:gap-0"
                   >
-                    <span class="text-gray-700 font-medium">{{ item.name }}</span>
-                    <span class="font-semibold text-emerald-600">{{ item.amount }}€</span>
+                    <span class="text-gray-700 font-medium text-sm sm:text-base">{{ item.name }}</span>
+                    <span class="font-semibold text-emerald-600 text-sm sm:text-base">{{ item.amount }}€</span>
                   </div>
                 </div>
               </div>
 
               <div class="pt-4 border-t">
-                <div class="flex justify-between items-center p-2 rounded-lg transition-all duration-300 hover:bg-green-50 hover:shadow-sm">
-                  <span class="text-green-600 font-semibold flex items-center gap-2">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform transition-all duration-300 hover:scale-[1.02] gap-2 sm:gap-0">
+                  <span class="font-bold flex items-center gap-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -383,7 +381,7 @@
                 </div>
               </div>
               <div class="pt-4 border-t">
-                <div class="flex justify-between items-center p-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform transition-all duration-300 hover:scale-[1.02]">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform transition-all duration-300 hover:scale-[1.02] gap-2 sm:gap-0">
                   <span class="font-bold flex items-center gap-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -404,13 +402,13 @@
                   <span class="font-bold">500.200€</span>
                 </div>
                 <div class="relative">
-                  <div class="flex items-center justify-end gap-2 mt-7 bg-yellow-50 border border-yellow-200 rounded-lg p-2 pr-3 group hover:bg-yellow-100 transition-all duration-300 cursor-default">
+                  <div class="flex items-center justify-end gap-2 mt-5 sm:mt-7 bg-yellow-50 border border-yellow-200 rounded-lg p-2 pr-3 group hover:bg-yellow-100 transition-all duration-300 cursor-default">
                     <!-- Flecha Heroicon -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
-                         class="w-8 h-8 text-yellow-600 absolute -top-8 right-8 group-hover:translate-y-1 transition-transform duration-300">
+                         class="hidden md:block w-6 h-6 sm:w-8 sm:h-8 text-yellow-600 absolute -top-6 sm:-top-8 right-6 sm:right-8 group-hover:translate-y-1 transition-transform duration-300">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 4.5l-15 15m0 0h11.25m-11.25 0V8.25" />
                     </svg>
-                    <span class="text-sm font-medium text-yellow-800 group-hover:text-yellow-900 transition-colors duration-300">
+                    <span class="text-xs sm:text-sm font-medium text-yellow-800 group-hover:text-yellow-900 transition-colors duration-300">
                       ¡Pago yo los 200€ que faltan!
                     </span>
                   </div>
@@ -446,7 +444,7 @@
           <TransitionGroup
             name="team-fade"
             tag="div"
-            class="grid grid-cols-3 gap-4"
+            class="grid grid-cols-1 md:grid-cols-3 gap-4"
           >
             <div
               v-for="(member, idx) in teamStructure"
@@ -820,13 +818,43 @@ function getTooltipText(index) {
   height: 100%;
   position: fixed;
   inset: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .strategic-plan-dashboard > div {
   width: 100%;
-  max-width: calc(100vw - 17px); /* Ancho total menos el ancho del scrollbar */
+}
+
+@media (min-width: 768px) {
+  .strategic-plan-dashboard > div {
+    max-width: calc(100vw - 17px);
+  }
+
+  ::-webkit-scrollbar {
+    width: 17px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border: 5px solid transparent;
+    border-radius: 9999px;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #9ca3af;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db transparent;
+  }
 }
 
 /* Eliminar el cambio de padding en modo presentación */
