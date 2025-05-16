@@ -1,5 +1,6 @@
 <template>
-  <div class="strategic-plan-dashboard min-h-screen w-full relative overflow-hidden">
+  <div class="strategic-plan-dashboard min-h-screen w-full relative"
+       :class="{ 'overflow-hidden': isPresentationMode }">
     <!-- Presentation Mode -->
     <div
       class="min-h-screen w-full absolute inset-0 transition-all duration-1000"
@@ -738,7 +739,7 @@ function startMainPresentation () {
     // Show full content
     setTimeout(() => {
         isPresentationMode.value = false;
-    }, 500);
+    }, 100);
 
     // Show all sections and animate KPIs
     setTimeout(() => {
@@ -752,13 +753,13 @@ function startMainPresentation () {
         kpiProgress.value = kpis.map(() => 0);
         setTimeout(() => {
             kpiProgress.value = kpis.map(kpi => kpi.progress);
-        }, 100);
-    }, 1000);
+        }, 50);
+    }, 200);
 
     // Scroll to top
     setTimeout(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1500);
+    }, 300);
 }
 
 function selectQuarter (quarter) {
@@ -789,9 +790,40 @@ function animateAllKPIs () {
 
 <style scoped>
 .strategic-plan-dashboard {
-  @apply bg-gray-50 select-none cursor-default;
+  @apply bg-gray-50 select-none cursor-default pr-[17px];
   min-height: 100vh;
   height: 100%;
+}
+
+/* Para evitar el doble padding en modo presentación */
+.strategic-plan-dashboard.overflow-hidden {
+  @apply pr-0;
+}
+
+/* Estilos personalizados para la barra de scroll */
+::-webkit-scrollbar {
+  width: 17px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border: 5px solid transparent;
+  border-radius: 9999px;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
 }
 
 .stats-card {
